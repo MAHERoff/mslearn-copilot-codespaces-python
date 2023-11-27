@@ -35,3 +35,9 @@ def generate(body: Body):
     """
     string = base64.b64encode(os.urandom(64))[:body.length].decode('utf-8')
     return {'token': string}
+    
+# Créez un modèle Pydantic pour représenter un texte
+
+
+class Text(BaseModel):
+    text: str
