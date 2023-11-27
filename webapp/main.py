@@ -1,5 +1,5 @@
-import os
 import base64
+import os
 from typing import Union
 from os.path import dirname, abspath, join
 from fastapi import FastAPI
