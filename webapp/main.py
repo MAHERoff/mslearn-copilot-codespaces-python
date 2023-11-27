@@ -5,7 +5,9 @@ from os.path import dirname, abspath, join
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi import HTTPException
 from pydantic import BaseModel
+import hashlib
 
 current_dir = dirname(abspath(__file__))
 static_path = join(current_dir, "static")
@@ -41,3 +43,22 @@ def generate(body: Body):
 
 class Text(BaseModel):
     text: str
+
+# Create a FastAPI endpoint that accepts a POST request with a JSON body containing a single field called "text" and returns a checksum of the text
+
+
+app = FastAPI()
+
+
+class TextInput(BaseModel):
+    text: str
+
+
+@app.post("/checksum")
+def calculate_checksum(input_data: TextInput):
+    try:
+        text = input_data.text
+        checksum = hashlib.sha256(text.encode()).hexdigest()
+        return {"checksum": checksum}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
